@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Candidatos 2026 - Elecciones Presidenciales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            background-color: #c10e16;
+            padding: 15px 0;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            opacity: 0.8;
+        }
+
+        .header-voto-rojo {
+            background: #c10e16;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 800;
+            padding: 18px 24px;
+            margin: 25px 0 30px 0;
+            border-radius: 28px;
+            text-align: center;
+        }
+
+        .candidate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+            margin-bottom: 40px;
+        }
+
+        .candidate-card-mini {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .candidate-card-mini:hover {
+            transform: translateY(-5px);
+            border-color: #c10e16;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-img {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .card-img img:first-child {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #c10e16;
+        }
+
+        .mini-party-icon {
+            position: absolute;
+            bottom: -5px;
+            right: -8px;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            object-fit: contain;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 2px;
+        }
+
+        .card-info-mini {
+            flex: 1;
+            padding-left: 16px;
+        }
+
+        .mini-name {
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #1e3a4d;
+            margin: 0 0 5px 0;
+            text-transform: uppercase;
+        }
+
+        .mini-party {
+            font-weight: 600;
+            font-size: 0.7rem;
+            background: #f0f2f5;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: #c10e16;
+        }
+
+        .btn-volver {
+            background: #4a5568;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            margin: 15px 0 25px;
+            font-size: 1rem;
+        }
+
+        .btn-volver:hover {
+            background: #c10e16;
+            transform: translateX(-3px);
+        }
+
+        .candidate-card {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            background: white;
+            border-radius: 32px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .candidate-photo {
+            position: relative;
+            text-align: center;
+        }
+
+        .candidate-photo img:first-child {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #c10e16;
+        }
+
+        .party-logo-overlay {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+
+        .party-logo-overlay img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .candidate-info {
+            flex: 1;
+        }
+
+        .candidate-info h1 {
+            font-size: 1.5rem;
+            color: #1e3b4f;
+            margin-bottom: 8px;
+        }
+
+        .role {
+            font-size: 1rem;
+            color: #c10e16;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 24px;
+        }
+
+        .label {
+            font-weight: 700;
+            color: #2c5a7a;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 24px;
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: #f9fafc;
+            cursor: pointer;
+        }
+
+        .section-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #c10e16;
+        }
+
+        .section-header span {
+            font-size: 1.7rem;
+            font-weight: 400;
+            color: #c10e16;
+        }
+
+        .section-content {
+            display: none;
+            padding: 18px 22px;
+            border-top: 1px solid #e9edf2;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #dee4ec;
+            padding: 10px 8px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+        }
+
+        .sin-info {
+            color: #5f7d9c;
+            font-style: italic;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 700px) {
+            .candidate-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-voto-rojo {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="container">
+        <nav class="menu">
+            <a href="#">Inicio</a>
+            <a href="senadoresnacionales.html">Senadores</a>
+            <a href="diputadosregionalesnacionales.html">Diputados Regionales y Nacionales</a>
+            <a href="parlamentoandino.html">Parlamento Andino</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div id="lista">
+        <div class="header-voto-rojo">
+            CANDIDATOS PRESIDENCIALES 2026
+        </div>
+        <div class="candidate-grid" id="candidatesGrid"></div>
+    </div>
+
+    <div id="detalle" style="display:none;">
+        <button class="btn-volver" onclick="volverALista()">← Regresar</button>
+        <div id="detalle-contenedor"></div>
+    </div>
+</div>
+
+<script>
+    // BASE DE DATOS DE CANDIDATOS
+    const candidatosData = [
+        { id: "pablo_chau", nombre: "PABLO ALFONSO LOPEZ CHAU NAVA", partido: "AHORA NACION - AN", foto: "candidatos/pablo_chau.jpg", logo: "partidos/ahoranacion.jpg", profesion: "Administrador de Empresas", nacimiento: "Lima, 1975", domicilio: "San Isidro, Lima", sexo: "Masculino", educacion_basica: "Sí (Primaria y Secundaria)", estudios_tecnicos: "Diplomado en Gestión Pública", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad de Lima", concluido: "Sí", grado: "LIC. ADMINISTRACIÓN", anio: "1999" }], posgrado: [{ centro: "ESAN", especialidad: "MBA", concluido: "Sí", grado: "MAGISTER", anio: "2005" }] },
+        { id: "acuna", nombre: "CESAR ACUÑA PERALTA", partido: "ALIANZA PARA EL PROGRESO", foto: "candidatos/acuna.jpg", logo: "partidos/AlianzaparaelProgreso.jpg", profesion: "Empresario", nacimiento: "La Libertad, 1952", domicilio: "Trujillo", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad Nacional de Trujillo", concluido: "Sí", grado: "ING. INDUSTRIAL", anio: "1976" }], posgrado: [{ centro: "ESAN", especialidad: "MAESTRÍA ADMINISTRACIÓN", concluido: "Sí", grado: "MAGISTER", anio: "1985" }] },
+        { id: "jose_williams", nombre: "JOSE DANIEL WILLIAMS ZAPATA", partido: "AVANZA PAÍS", foto: "candidatos/jose.jpg", logo: "partidos/avanzapais.jpg", profesion: "Economista", nacimiento: "Lima, 1968", domicilio: "Magdalena del Mar", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad del Pacífico", concluido: "Sí", grado: "ECONOMISTA", anio: "1992" }], posgrado: [{ centro: "Universidad de Piura", especialidad: "MAESTRÍA FINANZAS", concluido: "Sí", grado: "MAGISTER", anio: "1999" }] },
+        { id: "alvaro_paz", nombre: "ALVARO GONZALO PAZ DE LA BARRA FREIGEIRO", partido: "FE EN EL PERÚ", foto: "candidatos/alvaro.jpg", logo: "partidos/feenelperu.jpg", profesion: "Ingeniero Civil", nacimiento: "Lima, 1960", domicilio: "San Borja", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad Nacional de Ingeniería", concluido: "Sí", grado: "ING. CIVIL", anio: "1984" }], posgrado: [{ centro: "PUCP", especialidad: "GERENCIA PROYECTOS", concluido: "Sí", grado: "ESPECIALISTA", anio: "1992" }] },
+        { id: "keiko", nombre: "KEIKO SOFIA FUJIMORI HIGUCHI", partido: "FUERZA POPULAR", foto: "candidatos/keiko.jpg", logo: "partidos/fuerzapopular.jpg", profesion: "Administradora", nacimiento: "Lima, 1975", domicilio: "Santiago de Surco", sexo: "Femenino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad de Boston", concluido: "Sí", grado: "BBA", anio: "1997" }], posgrado: [{ centro: "Columbia University", especialidad: "MPA", concluido: "Sí", grado: "MAGISTER", anio: "2008" }] },
+        { id: "roberto_sanchez", nombre: "ROBERTO HELBERT SANCHEZ PALOMINO", partido: "JUNTOS POR EL PERÚ", foto: "candidatos/roberto.jpg", logo: "partidos/juntos_por_el_Peru.jpg", profesion: "Abogado", nacimiento: "Ayacucho, 1960", domicilio: "Lima", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad San Cristóbal de Huamanga", concluido: "Sí", grado: "ABOGADO", anio: "1986" }], posgrado: [{ centro: "UNMSM", especialidad: "DERECHOS HUMANOS", concluido: "Sí", grado: "MAGISTER", anio: "2004" }] },
+        { id: "belmont", nombre: "RICARDO PABLO BELMONT CASSINELLI", partido: "PARTIDO CIVICO OBRAS", foto: "candidatos/RicardoBelmont.jpg", logo: "partidos/Partido_Civico_OBRAS.jpg", profesion: "Ingeniero Civil", nacimiento: "Lima, 1956", domicilio: "Miraflores", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "PUCP", concluido: "Sí", grado: "ING. CIVIL", anio: "1980" }], posgrado: [{ centro: "Univ. de Texas", especialidad: "MSc Infraestructura", concluido: "Sí", grado: "MAGISTER", anio: "1988" }] },
+        { id: "jorge_nieto", nombre: "JORGE NIETO MONTESINOS", partido: "PARTIDO DEL BUEN GOBIERNO", foto: "candidatos/jorge.jpg", logo: "partidos/buengobierno.jpg", profesion: "Sociólogo", nacimiento: "Lima, 1952", domicilio: "Barranco", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "UNMSM", concluido: "Sí", grado: "SOCIÓLOGO", anio: "1978" }], posgrado: [{ centro: "FLACSO", especialidad: "CIENCIA POLÍTICA", concluido: "Sí", grado: "MAGISTER", anio: "1990" }] },
+        { id: "alex_gonzales", nombre: "ALEX GONZALES CASTILLO", partido: "PARTIDO DEMOCRATA VERDE", foto: "candidatos/alexgonzales.jpg", logo: "partidos/partidoverde.jpg", profesion: "Ing. Ambiental", nacimiento: "Cusco, 1970", domicilio: "Cusco", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "Técnico en Ecología", estudios_no_univ: "Instituto del Ambiente", universidad: [{ inst: "UNSAAC", concluido: "Sí", grado: "ING. AMBIENTAL", anio: "1997" }], posgrado: [{ centro: "Univ. Barcelona", especialidad: "DESARROLLO SOSTENIBLE", concluido: "Sí", grado: "MAGISTER", anio: "2005" }] },
+        { id: "george_forsyth", nombre: "GEORGE PATRICK FORSYTH SOMMER", partido: "SOMOS PERÚ", foto: "candidatos/george.jpg", logo: "partidos/Somos_Perú.jpg", profesion: "Administrador", nacimiento: "Lima, 1982", domicilio: "La Molina", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "USIL", concluido: "Sí", grado: "LIC. ADMINISTRACIÓN", anio: "2008" }], posgrado: [{ centro: "ESAN", especialidad: "MARKETING POLÍTICO", concluido: "Sí", grado: "DIPLOMADO", anio: "2015" }] },
+        { id: "luis_olivera", nombre: "LUIS FERNANDO OLIVERA VEGA", partido: "FRENTE ESPERANZA 2021", foto: "candidatos/luisfernando.jpg", logo: "partidos/frente.jpg", profesion: "Abogado", nacimiento: "Lambayeque, 1965", domicilio: "Chiclayo", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad Pedro Ruiz Gallo", concluido: "Sí", grado: "ABOGADO", anio: "1990" }], posgrado: [{ centro: "USMP", especialidad: "DERECHO CONSTITUCIONAL", concluido: "Sí", grado: "MAGISTER", anio: "2000" }] },
+        { id: "carlos_alvarez", nombre: "CARLOS GONSALO ALVAREZ LOAYZA", partido: "PAIS PARA TODOS", foto: "candidatos/carlos.jpg", logo: "partidos/paisparatodos.jpg", profesion: "Economista", nacimiento: "Arequipa, 1962", domicilio: "Arequipa", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "UNSA", concluido: "Sí", grado: "ECONOMISTA", anio: "1986" }], posgrado: [{ centro: "Univ. de Chile", especialidad: "ECONOMÍA REGIONAL", concluido: "Sí", grado: "MAGISTER", anio: "1995" }] },
+        { id: "yonhy_lescano", nombre: "YONHY LESCANO ANCIETA", partido: "COOPERACIÓN POPULAR", foto: "candidatos/yonhy.jpg", logo: "partidos/Logo_Cooperacion_Popular_Peru.jpg", profesion: "Abogado", nacimiento: "Lima, 1963", domicilio: "San Miguel", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "UNMSM", concluido: "Sí", grado: "ABOGADO", anio: "1989" }], posgrado: [{ centro: "PUCP", especialidad: "DERECHO PROCESAL", concluido: "Sí", grado: "MAGISTER", anio: "2002" }] },
+        { id: "wolfgang_grozo", nombre: "WOLFGANG MARIO GROZO COSTA", partido: "INTEGRIDAD DEMOCRÁTICA", foto: "candidatos/grozo.jpg", logo: "partidos/Integridad_democratica.jpg", profesion: "Economista", nacimiento: "Lima, 1971", domicilio: "Miraflores", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad del Pacífico", concluido: "Sí", grado: "ECONOMISTA", anio: "1995" }], posgrado: [{ centro: "Univ. Barcelona", especialidad: "GOBIERNO ABIERTO", concluido: "Sí", grado: "MAGISTER", anio: "2006" }] },
+        { id: "cerron", nombre: "VLADIMIR ROY CERRON ROJAS", partido: "PERÚ LIBRE", foto: "candidatos/cerron.jpg", logo: "partidos/perulibre.jpg", profesion: "Médico Cirujano", nacimiento: "Junín, 1970", domicilio: "Lima", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Univ. de Camagüey", concluido: "Sí", grado: "MÉDICO CIRUJANO", anio: "1997" }], posgrado: [{ centro: "UNMSM", especialidad: "SALUD PÚBLICA", concluido: "Sí", grado: "MAGISTER", anio: "2005" }] },
+        { id: "espa", nombre: "ALFONSO CARLOS ESPA Y GARCES-ALVEAR", partido: "SÍ CREO", foto: "candidatos/espa.jpg", logo: "partidos/sicreo.jpg", profesion: "Periodista/Abogado", nacimiento: "Lima, 1962", domicilio: "San Isidro", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "Diplomado", estudios_no_univ: "Instituto de Periodismo", universidad: [{ inst: "Univ. de Lima", concluido: "Sí", grado: "COMUNICACIÓN", anio: "1986" }, { inst: "Univ. Inca Garcilaso", concluido: "Sí", grado: "ABOGADO", anio: "1997" }], posgrado: [{ centro: "Univ. Complutense", especialidad: "COMUNICACIÓN POLÍTICA", concluido: "Sí", grado: "MÁSTER", anio: "2001" }] },
+        { id: "luna", nombre: "JOSE LEON LUNA GALVEZ", partido: "PODEMOS PERÚ", foto: "candidatos/luna.jpg", logo: "partidos/podemosperu.jpg", profesion: "Economista", nacimiento: "Huancavelica, 1965", domicilio: "San Borja", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "USMP", concluido: "Sí", grado: "ECONOMISTA", anio: "1985" }], posgrado: [{ centro: "ESAN", especialidad: "FINANZAS", concluido: "Sí", grado: "MAGISTER", anio: "1992" }] },
+        { id: "rafael", nombre: "RAFAEL BERNARDO LOPEZ ALIAGA CAZORLA", partido: "RENOVACIÓN POPULAR", foto: "candidatos/rafael.jpg", logo: "partidos/renovaciónpopular.jpg", profesion: "Ingeniero Industrial", nacimiento: "Lima, 1961", domicilio: "Miraflores", sexo: "Masculino", educacion_basica: "Sí", estudios_tecnicos: "No registra", estudios_no_univ: "No registra", universidad: [{ inst: "Universidad de Piura", concluido: "Sí", grado: "ING. INDUSTRIAL", anio: "1984" }], posgrado: [{ centro: "IESE Business School", especialidad: "MBA", concluido: "Sí", grado: "MAGISTER", anio: "1990" }] }
+    ];
+
+    function cargarLista() {
+        const grid = document.getElementById("candidatesGrid");
+        grid.innerHTML = "";
+        candidatosData.forEach(c => {
+            const card = document.createElement("div");
+            card.className = "candidate-card-mini";
+            card.onclick = () => verDetalle(c.id);
+            card.innerHTML = `
+                <div class="card-img">
+                    <img src="${c.foto}" onerror="this.src='https://placehold.co/75x75?text=No+Foto'">
+                    <img src="${c.logo}" class="mini-party-icon" onerror="this.style.display='none'">
+                </div>
+                <div class="card-info-mini">
+                    <p class="mini-name">${c.nombre}</p>
+                    <p class="mini-party">${c.partido}</p>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function verDetalle(id) {
+        const c = candidatosData.find(c => c.id === id);
+        if (!c) return;
+        
+        const uniHtml = c.universidad ? `<table class="data-table"><thead><tr><th>UNIVERSIDAD</th><th>CONCLUÍDO</th><th>GRADO</th><th>AÑO</th></tr></thead><tbody>${c.universidad.map(u => `<tr><td>${u.inst}</td><td>${u.concluido}</td><td>${u.grado}</td><td>${u.anio}</td></tr>`).join('')}</tbody></table>` : '<div class="sin-info">No registra</div>';
+        
+        const posgradoHtml = c.posgrado ? `<table class="data-table"><thead><tr><th>CENTRO</th><th>ESPECIALIDAD</th><th>CONCLUÍDO</th><th>GRADO</th><th>AÑO</th></tr></thead><tbody>${c.posgrado.map(p => `<tr><td>${p.centro}</td><td>${p.especialidad}</td><td>${p.concluido}</td><td>${p.grado}</td><td>${p.anio}</td></tr>`).join('')}</tbody><table>` : '<div class="sin-info">No registra</div>';
+        
+        document.getElementById("detalle-contenedor").innerHTML = `
+            <section class="candidate-card">
+                <div class="candidate-photo">
+                    <img src="${c.foto}" onerror="this.src='https://placehold.co/160x160?text=Foto'">
+                    <div class="party-logo-overlay"><img src="${c.logo}" onerror="this.style.display='none'"></div>
+                </div>
+                <div class="candidate-info">
+                    <h1>${c.nombre}</h1>
+                    <p class="role">Cargo al que postula: <strong>PRESIDENTE</strong></p>
+                    <div class="details-grid">
+                        <div><span class="label">Profesión:</span> ${c.profesion}</div>
+                        <div><span class="label">Nacimiento:</span> ${c.nacimiento}</div>
+                        <div><span class="label">DNI:</span> [Protegido]</div>
+                        <div><span class="label">Domicilio:</span> ${c.domicilio}</div>
+                        <div><span class="label">Sexo:</span> ${c.sexo}</div>
+                    </div>
+                </div>
+            </section>
+            <div class="info-section"><div class="section-header" onclick="toggleSeccion(this)"><h2>EDUCACIÓN BÁSICA</h2><span>+</span></div><div class="section-content"><div class="sin-info">${c.educacion_basica}</div></div></div>
+            <div class="info-section"><div class="section-header" onclick="toggleSeccion(this)"><h2>ESTUDIOS TÉCNICOS</h2><span>+</span></div><div class="section-content"><div class="sin-info">${c.estudios_tecnicos || "No registra"}</div></div></div>
+            <div class="info-section"><div class="section-header" onclick="toggleSeccion(this)"><h2>ESTUDIOS NO UNIVERSITARIOS</h2><span>+</span></div><div class="section-content"><div class="sin-info">${c.estudios_no_univ || "No registra"}</div></div></div>
+            <div class="info-section"><div class="section-header" onclick="toggleSeccion(this)"><h2>ESTUDIOS UNIVERSITARIOS</h2><span>+</span></div><div class="section-content">${uniHtml}</div></div>
+            <div class="info-section"><div class="section-header" onclick="toggleSeccion(this)"><h2>ESTUDIOS DE POSGRADO</h2><span>+</span></div><div class="section-content">${posgradoHtml}</div></div>
+        `;
+        
+        document.getElementById("lista").style.display = "none";
+        document.getElementById("detalle").style.display = "block";
+        window.scrollTo({ top: 0 });
+    }
+
+    function volverALista() {
+        document.getElementById("lista").style.display = "block";
+        document.getElementById("detalle").style.display = "none";
+    }
+
+    function toggleSeccion(header) {
+        const content = header.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            header.querySelector("span").innerHTML = "+";
+        } else {
+            content.style.display = "block";
+            header.querySelector("span").innerHTML = "−";
+        }
+    }
+
+    cargarLista();
+</script>
+
+</body>
+</html>
