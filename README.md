@@ -1,1 +1,0 @@
-# candidatospresidenciales2026
