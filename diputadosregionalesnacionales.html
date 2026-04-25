@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Diputados 2026 - Lista por Partido</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            background-color: #c10e16;
+            padding: 15px 0;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            opacity: 0.8;
+        }
+
+        .title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #c10e16;
+            font-size: 24px;
+            margin-top: 0;
+            padding-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 30px;
+        }
+
+        .parties-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        .party-card {
+            background: white;
+            border-radius: 20px;
+            width: 260px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .party-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: #c10e16;
+        }
+
+        .party-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            display: block;
+            border-radius: 50%;
+            background: #f5f5f5;
+            padding: 10px;
+        }
+
+        .party-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a2a3a;
+        }
+
+        .candidate-count {
+            background: #f0f0f0;
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .volver-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            margin: 15px 0 25px;
+            transition: background 0.2s;
+        }
+
+        .volver-btn:hover {
+            background: #c10e16;
+            transform: translateX(-3px);
+        }
+
+        .diputados-container {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        .party-header-detail {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 3px solid #c10e16;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .party-img-detail {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: #f5f5f5;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .party-title-detail {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a2a3a;
+            margin: 0;
+        }
+
+        .candidatos-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .candidato-diputado {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 18px;
+            background: #f9fafb;
+            border-radius: 60px;
+            transition: all 0.2s;
+            border: 1px solid #e9ecef;
+        }
+
+        .candidato-diputado:hover {
+            background: #f1f5f9;
+            transform: translateX(5px);
+        }
+
+        .candidato-numero {
+            font-weight: 800;
+            font-size: 18px;
+            color: #c10e16;
+            width: 40px;
+            text-align: center;
+        }
+
+        .candidato-img-mini {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 8px;
+            background-color: #1e4668;
+        }
+
+        .candidato-nombre-completo {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e2f3e;
+            flex: 1;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 768px) {
+            .party-card { width: 220px; padding: 18px 10px; }
+            .party-name { font-size: 14px; }
+            .party-img { width: 60px; height: 60px; }
+            .party-title-detail { font-size: 20px; }
+            .party-img-detail { width: 60px; height: 60px; }
+            .candidato-diputado { padding: 8px 12px; }
+            .candidato-nombre-completo { font-size: 12px; }
+            .candidato-img-mini { width: 36px; height: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="container">
+        <nav class="menu">
+            <a href="index.html">Inicio</a>
+            <a href="senadoresnacionales.html">Senadores</a>
+            <a href="diputadosregionalesnacionales.html">Diputados</a>
+            <a href="parlamentoandino.html">Parlamento Andino</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div id="lista-partidos">
+        <div class="title">ELECCIONES GENERALES 2026</div>
+        <div class="subtitle">CANDIDATOS A DIPUTADOS</div>
+        
+        <div class="parties-grid" id="partidosGrid"></div>
+    </div>
+
+    <div id="detalle-diputados" style="display:none;">
+        <button class="volver-btn" onclick="volverLista()">← VOLVER A PARTIDOS</button>
+        <div id="contenido-diputados"></div>
+    </div>
+</div>
+
+<script>
+    // LISTA COMPLETA DE PARTIDOS PARA DIPUTADOS
+    const partidosDiputados = [
+        { id: "AHORA NACION", nombre: "AHORA NACIÓN", imgSrc: "partidos/ahoranacion.jpg", cant: 16 },
+        { id: "FUERZA POPULAR", nombre: "FUERZA POPULAR", imgSrc: "partidos/fuerzapopular.jpg", cant: 15 },
+        { id: "ALIANZA PARA EL PROGRESO", nombre: "ALIANZA PARA EL PROGRESO", imgSrc: "partidos/AlianzaparaelProgreso.jpg", cant: 15 },
+        { id: "PARTIDO DEL BUEN GOBIERNO", nombre: "PARTIDO DEL BUEN GOBIERNO", imgSrc: "partidos/buengobierno.jpg", cant: 14 },
+        { id: "JUNTOS POR EL PERU", nombre: "JUNTOS POR EL PERÚ", imgSrc: "partidos/juntos_por_el_Peru.jpg", cant: 14 },
+        { id: "FE EN EL PERU", nombre: "FE EN EL PERÚ", imgSrc: "partidos/feenelperu.jpg", cant: 14 },
+        { id: "SOMOS PERU", nombre: "SOMOS PERÚ", imgSrc: "partidos/Somos_Perú.jpg", cant: 18 },
+        { id: "PARTIDO PAIS PARA TODOS", nombre: "PARTIDO PAÍS PARA TODOS", imgSrc: "partidos/paisparatodos.jpg", cant: 14 },
+        { id: "RENOVACION POPULAR", nombre: "RENOVACIÓN POPULAR", imgSrc: "partidos/renovaciónpopular.jpg", cant: 19 },
+        { id: "PODEMOS PERU", nombre: "PODEMOS PERÚ", imgSrc: "partidos/podemosperu.jpg", cant: 14 },
+        { id: "PERU LIBRE", nombre: "PERÚ LIBRE", imgSrc: "partidos/perulibre.jpg", cant: 14 },
+        { id: "AVANZA PAIS", nombre: "AVANZA PAÍS", imgSrc: "partidos/avanzapais.jpg", cant: 15 },
+        { id: "INTEGRIDAD DEMOCRATICA", nombre: "INTEGRIDAD DEMOCRÁTICA", imgSrc: "partidos/Integridad_democratica.jpg", cant: 19 },
+        { id: "COOPERACION POPULAR", nombre: "COOPERACIÓN POPULAR", imgSrc: "partidos/Logo_Cooperacion_Popular_Peru.jpg", cant: 15 },
+        { id: "PARTIDO CIVICO OBRAS", nombre: "PARTIDO CÍVICO OBRAS", imgSrc: "partidos/Partido_Civico_OBRAS.jpg", cant: 15 },
+        { id: "FRENTE ESPERANZA", nombre: "FRENTE DE LA ESPERANZA", imgSrc: "partidos/frente.jpg", cant: 15 },
+        { id: "PARTIDO MORADO", nombre: "PARTIDO MORADO", imgSrc: "partidos/partidomorado.jpg", cant: 18 }
+    ];
+
+    // NOMBRES REALES DE DIPUTADOS POR CADA PARTIDO
+    const diputadosPorPartido = {
+        'AHORA NACION': [
+            "JUAN CARLOS DEL AGUILA CARDENAS", "MARIA ISABEL CORTEZ ESPINO", "PEDRO ANTONIO CASTILLO VALIENTE",
+            "LUCIA ROSA ALVITES CRUZ", "JORGE LUIS SALAZAR VILLARREAL", "CARMEN ROSA NUÑEZ DAVILA",
+            "RICARDO MARTIN BRICEÑO VILLEGAS", "SANDRA ELENA CHAVEZ FARRO", "JOSE ALBERTO RAMIREZ FLORES",
+            "PAULINA VICTORIA AGUILAR QUISPE", "CARLOS ENRIQUE SILVA TAFUR", "ROXANA ELIZABETH GONZALES",
+            "OSCAR RAUL ALFARO BONIFACIO", "MIRIAM ROSA MONTALVO GARCIA", "LUIS ENRIQUE SALAZAR PACHECO",
+            "NANCY LILIANA REYNA AGUIRRE"
+        ],
+        'FUERZA POPULAR': [
+            "MIGUEL ANGEL TORRES MORALES", "MARTHA GLADYS CHAVEZ COSSIO", "FERNANDO MIGUEL ROSPIGLIOSI CAPURRO",
+            "CARMEN PATRICIA JUAREZ GALLEGOS", "CESAR AUGUSTO ASTUDILLO SALCEDO", "MARTHA LUPE MOYANO DELGADO",
+            "CARLOS MARIO DEL CARMEN TUBINO ARIAS SCHREIBER", "CECILIA ANTONIETA CASTRO TORRES",
+            "CARLOS FERNANDO MESIA RAMIREZ", "SITZA LITA ROMERO PERALTA", "SANDRO ESPOSITO SHAPIAMA",
+            "RITA ELENA AYASTA DE DIAZ", "RICARDO RIVERA ROMERO", "LILIANA ANGELICA PINEDO ACHACA",
+            "JOSE CARLOS RUBIO HERNANDEZ"
+        ],
+        'ALIANZA PARA EL PROGRESO': [
+            "CESAR ACUÑA PERALTA", "MARISOL ESPINOZA CRUZ", "CESAR HENRY VASQUEZ SANCHEZ",
+            "LADY MERCEDES CAMONES SORIANO", "JUAN JOSE SANTIVAÑEZ ANTUNEZ", "TANIA ROSALIA RODAS MALCA",
+            "ROBERTO GAMANIEL VIEIRA PORTUGAL", "MAGALY ROSMERY RUIZ RODRIGUEZ", "MARTIN FELIPE SALAS ZEGARRA",
+            "CINDY ARLETTE CONTRERAS BAUTISTA", "LUIS ROBERTO KAMICHE MORANTE", "LUZ REBECA CRUZ TEVEZ",
+            "JORGE ALFONSO MARTICORENA MENDOZA", "JOSE ANTONIO PALACIOS OBREGON", "JOEL CHRISTOPHER HUAMAN ALATA"
+        ],
+        'PARTIDO DEL BUEN GOBIERNO': [
+            "FLAVIO FELIPE FIGALLO RIVADENEYRA", "PATRICIA MILAGROS ITURREGUI BYRNE", "CARLOS DAVID CABALLERO LEON",
+            "LUZ ELENA FORONDA MERINO", "JUAN FRANCISCO ROJAS LEO", "SUSANA FLOR DE MARIA MATUTE CHARUN",
+            "ABRAHAM SANTIAGO SILES VALLEJOS", "LUISA IGNACIA SANTUR ALBERCA", "JORGE OCTAVIO GAVIDIA RODRIGUEZ",
+            "MARIA DEL PILAR AYQUIPA GUZMAN", "JOSE GUILLERMO NUGENT HERRERA", "SABINA GLORIA NUÑEZ ALTAMIRANO",
+            "ABEL MAXIMO SALAZAR CHINCHILLA", "BEATRIZ CAROLINA ZAVALA LOAYZA"
+        ],
+        'JUNTOS POR EL PERU': [
+            "JOSE MERCEDES CASTILLO TERRONES", "SILVANA EMPERATRIZ ROBLES ARAUJO", "SAUL ANDRES ARMACANQUI MORALES",
+            "ANAHI DURAND GUEVARA", "JOSE CARLOS ABARCA CALLO", "JANET PATRICIA MARIN RIVERA",
+            "BERNARDO JAIME QUITO SARMIENTO", "MARGOT PALACIOS HUAMAN", "ISAAC HUMALA NUÑEZ",
+            "PAULA HONORIA O'HIGGINS LUYO", "HERNANDO ISMAEL CEVALLOS FLORES", "EDELMIRA CRISTINA ROCILLO TELLO",
+            "IBER ANTENOR MARAVI OLARTE", "LUZ MARINA RODRIGUEZ CHAVEZ"
+        ],
+        'FE EN EL PERU': [
+            "BORIS MICHEEL PAZ DE LA BARRA", "JESUS FANNY FREIGEIRO MORAN", "JULIO CHUNG DAVILA",
+            "EVANGELINA HUAMANI LLAMAS", "CARLOS HUMBERTO GUZMAN RODRIGUEZ", "CELIA BEATRIZ MEJIA MORI",
+            "JOSE LUIS HUIRSE ZELARAYAN", "SABINA CARMEN ROSA SOTO HERRERA", "ALVARO GONZALO PAZ DE LA BARRA FREIGEIRO",
+            "SELENE MARBEL ROJAS QUIÑONES", "FAUSTO JUAN FLORES FLORES", "GABY GIOVANNA JAUREGUI GRADOS",
+            "YONER ALEXANDER VARAS LLATAS", "JULIO ARMANDO BANCES SALAZAR"
+        ],
+        'SOMOS PERU': [
+            "GUILLERMO ALEJANDRO ANTONIO ALIAGA PAJARES", "MATILDE FERNANDEZ FLOREZ", "DANIEL ENRIQUE SALAVERRY VILLA",
+            "MARIA DEL ROCIO PORRAS MARTEL", "ELMER ALFONSO DUEÑAS ESPIRITU", "ELIZABETH SARA MEDINA HERMOSILLA",
+            "HECTOR VALER PINTO", "DORA YANE MILLONES CARO DE WU", "ALEX ANTONIO PAREDES GONZALES",
+            "ZONIA MARIBEL LEON MUGUERZA", "DANIEL ASUNCION PRINCIPE COLLAZOS", "GIOVANNA BERENICE CASTAGNINO PASTOR",
+            "CESAR PANIAGUA CHACON", "YASMINA JAQUELIN LOYOLA SOPLIN", "JULIO APAZA ORTIZ",
+            "MARIA DEL PILAR EMILIA RAVINES AYALA", "LUIS ARMANDO CHAVEZ BORDA", "ROSAURA ELVIRA MENDOZA ROJAS"
+        ],
+        'PARTIDO PAIS PARA TODOS': [
+            "AMELIA JULIA PRINCIPE TRUJILLO", "VLADIMIR ANTONIO MEZA VILLARREAL", "SUSANA YNES CASTAÑEDA OTSU",
+            "JUAN MANUEL KOSME SHEPUT MOORE", "ELENA ELIZABETH LON KAN PRADO", "MARCO TULIO FALCONI PICARDO",
+            "RUTH PERPETUA VALENCIA MEZA", "JAVIER ANTONIO BOBADILLA LEIVA", "JUANA ALEXANDRA CHIPANA MORAZZANI",
+            "GEORGE EDWARD MALAGA TRILLO", "TERESA EGLE MOGROVEJO VALERA", "HERMES RAMON VELASQUEZ CHAMOCHUMBI",
+            "YESSICA SUSANA MERE RAMIREZ", "MARIO ENRICO CAROZZI FERNANDEZ MALDONADO"
+        ],
+        'RENOVACION POPULAR': [
+            "RAFAEL BERNARDO LOPEZ ALIAGA CAZORLA", "FIORELLA ROSMERY MOLINELLI ARISTONDO", "JORGE LUIS NUÑEZ SALAS",
+            "MARIA CRISTINA JURADO HIDALGO", "JOSE ALEJANDRO ORTEGA ORTEGA", "LUCIA MERCEDES BARRIONUEVO ZEVALLOS",
+            "RICARDO JAVIER PINZON ROBLES", "ROXANA MARIBEL DIAZ LAURA", "JORGE ALBERTO PAUCARMAYTA",
+            "MARIA ISABEL CORTEZ ESPINO", "MANUEL DAVID PIEDRA MARTINEZ", "SANDRA ELENA CHAVEZ FARRO",
+            "PEDRO ALEJANDRO JIMENEZ VILLANUEVA", "CARMEN ROSA BAUTISTA MATUTE", "JOSE ANTONIO MAURICIO VASQUEZ",
+            "MARIO JAVIER ALVAREZ VALLE", "ROSA ANGELICA SUAREZ VARELA", "JAVIER ARTURO CHIRINOS SANTOS",
+            "LILIANA ROSA YUPANQUI"
+        ],
+        'PODEMOS PERU': [
+            "JOSE LEON LUNA GALVEZ", "KARINA JULISSA BETETA RUBIO", "EDGARD RICHARD CORNEJO RAMIREZ",
+            "ANGELICA MARIA ALARCON HERRERA", "JOSE ANDRES REYMUNDO MERCADO", "ANA MARIA ARROYO BERROCAL",
+            "JUANA CELIA DURAN BAZAN", "LUIS ALBERTO VILLEGAS GAMARRA", "JESUS JAVIER ARAUJO HUAMAN",
+            "MARTHA ROSA AURIS AMES", "WALTER LUIS SALAZAR SANCHEZ", "MARIA GRIZELDA MONTES RIVERA",
+            "PABLO AUGUSTO ARIAS VALENCIA", "SELENE YANET RIVERA ZAMBRANO"
+        ],
+        'PERU LIBRE': [
+            "VLADIMIR ROY CERRON ROJAS", "JESSICA DEL PILAR BAÑOS RIVAS", "GUIDO ERNESTO BELLIDO UGAZ",
+            "BELINDA GEORGINA PEREZ VASQUEZ", "JORGE ANTONIO SUAREZ GUERRA", "MERY LUZ VASQUEZ RIVERA",
+            "JULIO JOSE SANCHEZ RASGADO", "DORIS BEATRIZ ROJAS COCA", "JOSE ARTURO AQUINO MOGROVEJO",
+            "MARLENE AMPARO VILLAVICENCIO TINEO", "RONALD ALEXIS PAUCAR HUAMAN", "JENNY MERCEDES NAVARRO TRUJILLO",
+            "FRANKLIN EDGAR TAPIA CHAMBA", "SANDRA JULIA SEPULVEDA SALAS"
+        ],
+        'AVANZA PAIS': [
+            "JOSE DANIEL WILLIAMS ZAPATA", "MARIA DEL CARMEN OCHOA MONTES", "ALDO LENIN MARTINEZ ZAPATA",
+            "GLADYS LILIANA CANALES CAYLLAHUA", "PEDRO ANGEL OLIVARES TOLEDO", "ROSA ELVIRA VASQUEZ CUBA",
+            "JOSE LUIS COAQUIRA CONDORI", "KATHERINE MILAGROS CASTRO VASQUEZ", "WALTER ROGERS ZAVALA ORIHUELA",
+            "MARIA CECILIA CHACON ALFARO", "JORGE LUIS ARENAS ALVA", "LILIANA ROSA MANRIQUE BARRETO",
+            "PABLO JOSE MORALES ALFARO", "ROXANA ELIZABETH FLORES BARDALES", "LUIS ALBERTO ALVAREZ SALAZAR"
+        ],
+        'INTEGRIDAD DEMOCRATICA': [
+            "WOLFGANG MARIO GROZO COSTA", "FERNANDO OSCAR CARDENAS SANCHEZ", "CAROLINA ESTHER VELASQUEZ CALDERON",
+            "JORGE WASHINGTON VIVANCO MAMANI", "JENNY CAROLINA MONZON CHAMBI", "ROBERTO CARLOS MEJIA NAVARRETE",
+            "GLORIA ELENA TORRES OLIVAS", "JOSE ALFONSO CHECYA CHIPA", "KARLA VANESSA MAMANI GARCIA",
+            "JESUS ALBERTO FERNANDEZ CALDERON", "LAURA ISABEL GARCIA MELGAR", "JAVIER ALONSO SALAZAR DELGADO",
+            "PAULINO HUAYNALAYA ROMAN", "MARISOL MARIBEL SANTOS AREVALO", "RAUL VICENTE ALLAUCA BARRIOS",
+            "JUAN CARLOS TORRES RAMOS", "VICTORIA ESPERANZA ABANTO SULLCA", "EMMA LILIANA RIOS TRUJILLO",
+            "JORGE LUIS SALAZAR VILLARREAL"
+        ],
+        'COOPERACION POPULAR': [
+            "YONHY LESCANO ANCIETA", "JENNY ELIZABETH VILCA MAMANI", "RONALD RUTTI CALLATA",
+            "LEONOR TAMAR CHAVEZ ORIHUELA", "JUAN CARLOS GARCIA ROMERO", "ANA LUCIA ROMERO ALFARO",
+            "SANTIAGO CRISTOBAL SANTOS PANEZ", "ERWIN ALBERTO RAMOS RODRIGUEZ", "MARTHA ROSA LORENZO FUENTES",
+            "ALBERTO CESAR QUISPE HILARIO", "SUSANA ROSARIO QUISPE CORNEJO", "NESTOR ADOLFO SAAVEDRA GOMEZ",
+            "CARLOS ALBERTO VARGAS MEZA", "MELANIA LEONOR INFANTES CHANTA", "KARINA ALEJANDRA PACHAS HUAPAYA"
+        ],
+        'PARTIDO CIVICO OBRAS': [
+            "RICARDO PABLO BELMONT CASSINELLI", "ROSA MARIA BARTRA BARRIGA", "ALDO EMILIO RENGIFO RENGIFO",
+            "PATRICIA CARMEN ALVAREZ GARCIA", "JUAN BAUTISTA TAPIA REATEGUI", "MARIA ELENA ALVARADO AREVALO",
+            "CARLOS ALBERTO CARMONA SIFUENTES", "MARIA ROSA PAREDES ZAPATA", "ROBERTO MANUEL ORDOÑEZ ZELADA",
+            "KARINA EDITH DELGADO TRUJILLO", "VICTORIA ESPERANZA ABANTO SULLCA", "JOEL CHRISTOPHER HUAMAN ALATA",
+            "EMMA LILIANA RIOS TRUJILLO", "JORGE LUIS SALAZAR VILLARREAL", "MARIA TERESA BUSTAMANTE QUISPE"
+        ],
+        'FRENTE ESPERANZA': [
+            "LUIS FERNANDO OLIVERA VEGA", "MAGALY LIZETH GRANADOS VASQUEZ", "JULIO ARMANDO BANCES SALAZAR",
+            "MARTHA SOFIA RENTERIA JARA", "JUAN BAUTISTA ZEGARRA CALERO", "CARMEN JULIA PAREDES MIÑANO",
+            "IVAN WILFREDO CERVANTES HILARES", "ROSA MARIA CABREJOS VILLAVERDE", "JOSE ARTEMIO OYOLA RAMIREZ",
+            "ANA CECILIA MUÑOZ SANCHEZ", "JULIO FLORENTINO PRIETO CORNEJO", "SALVADOR CARLOS FLORES FERNANDEZ",
+            "CARLOS ALBERTO VARGAS MEZA", "MELANIA LEONOR INFANTES CHANTA", "KARINA ALEJANDRA PACHAS HUAPAYA"
+        ],
+        'PARTIDO MORADO': [
+            "JULIO GUZMAN CACERES", "CAROLINA LIZARRAGA HOUGHTON", "FRANCISCO SAGASTI HOCHHAUSLER",
+            "ZENAIDA SOLIS GUTIERREZ", "GINO COSTA SANTOLALLA", "FLOR PABLO MEDINA", "ALBERTO DE BELAUNDE DE CARDENAS",
+            "MERCEDES ARAOZ FERNANDEZ", "PEDRO FRANCKE BALLVE", "MARISA GLAVE REMY", "INDIRA HUILCA FLORES",
+            "MARCO ARANA ZEGARRA", "ROCÍO SILVA SANTISTEBAN", "DANIEL OLIVARES CORTÉS", "SUSEL PAREDES PIQUÉ",
+            "DANIEL SALAVERRY VILLA", "PATRICIA DONAYRE PASQUEL", "JUAN CARLOS DEL ÁGUILA"
+        ]
+    };
+
+    function createFallbackImage(partyName, size = 80) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const hue = (partyName.length * 37) % 360;
+        ctx.fillStyle = `hsl(${hue}, 65%, 88%)`;
+        ctx.fillRect(0, 0, size, size);
+        ctx.beginPath();
+        ctx.arc(size/2, size/2, size*0.38, 0, 2 * Math.PI);
+        ctx.fillStyle = `hsl(${hue}, 70%, 55%)`;
+        ctx.fill();
+        let initials = partyName.substring(0, 2).toUpperCase();
+        if (partyName.includes("PROGRESO")) initials = "APP";
+        if (partyName.includes("BUEN GOBIERNO")) initials = "PBG";
+        if (partyName.includes("PAÍS")) initials = "PPT";
+        if (partyName.includes("RENOVACIÓN")) initials = "RP";
+        if (partyName.includes("JUNTOS")) initials = "JPP";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = `bold ${size * 0.32}px "Segoe UI"`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(initials, size/2, size/2);
+        return canvas.toDataURL();
+    }
+
+    function renderPartidosGrid() {
+        const grid = document.getElementById('partidosGrid');
+        grid.innerHTML = '';
+        partidosDiputados.forEach(partido => {
+            const card = document.createElement('div');
+            card.className = 'party-card';
+            card.onclick = () => mostrarDiputados(partido.id, partido.imgSrc, partido.nombre);
+            
+            const img = document.createElement('img');
+            img.className = 'party-img';
+            img.alt = partido.nombre;
+            img.src = partido.imgSrc;
+            img.onerror = function() { this.src = createFallbackImage(partido.nombre, 80); };
+            
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'party-name';
+            nameDiv.textContent = partido.nombre;
+            
+            const countSpan = document.createElement('div');
+            countSpan.className = 'candidate-count';
+            countSpan.textContent = `${partido.cant} candidatos`;
+            
+            card.appendChild(img);
+            card.appendChild(nameDiv);
+            card.appendChild(countSpan);
+            grid.appendChild(card);
+        });
+    }
+
+    function mostrarDiputados(partidoId, imgSrc, nombrePartido) {
+        const candidatos = diputadosPorPartido[partidoId] || [];
+        
+        document.getElementById('lista-partidos').style.display = 'none';
+        document.getElementById('detalle-diputados').style.display = 'block';
+        
+        let html = `
+            <div class="diputados-container">
+                <div class="party-header-detail">
+                    <img class="party-img-detail" src="${imgSrc}" alt="${nombrePartido}" 
+                         onerror="this.src='${createFallbackImage(nombrePartido, 80)}'">
+                    <h2 class="party-title-detail">${nombrePartido}</h2>
+                </div>
+                <div class="candidatos-lista">
+        `;
+        
+        candidatos.forEach((candidato, idx) => {
+            html += `
+                <div class="candidato-diputado">
+                    <div class="candidato-numero">${idx + 1}</div>
+                    <img class="candidato-img-mini" src="${imgSrc}" alt="logo" 
+                         onerror="this.src='${createFallbackImage(nombrePartido, 42)}'">
+                    <div class="candidato-nombre-completo">${candidato}</div>
+                </div>
+            `;
+        });
+        
+        html += `</div></div>`;
+        document.getElementById('contenido-diputados').innerHTML = html;
+    }
+
+    function volverLista() {
+        document.getElementById('detalle-diputados').style.display = 'none';
+        document.getElementById('lista-partidos').style.display = 'block';
+        document.getElementById('contenido-diputados').innerHTML = '';
+    }
+
+    renderPartidosGrid();
+</script>
+
+</body>
+</html>
