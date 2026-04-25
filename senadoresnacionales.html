@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Senadores 2026 - Lista por Partido</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            background-color: #c10e16;
+            padding: 15px 0;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            opacity: 0.8;
+        }
+
+        .title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #c10e16;
+            font-size: 24px;
+            margin-top: 0;
+            padding-bottom: 10px;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 30px;
+        }
+
+        .parties-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        .party-card {
+            background: white;
+            border-radius: 20px;
+            width: 260px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .party-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: #c10e16;
+        }
+
+        .party-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            display: block;
+            border-radius: 50%;
+            background: #f5f5f5;
+            padding: 10px;
+        }
+
+        .party-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a2a3a;
+        }
+
+        .candidate-count {
+            background: #f0f0f0;
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .volver-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            margin: 15px 0 25px;
+            transition: background 0.2s;
+        }
+
+        .volver-btn:hover {
+            background: #c10e16;
+            transform: translateX(-3px);
+        }
+
+        .senadores-container {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        .party-header-detail {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 3px solid #c10e16;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .party-img-detail {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: #f5f5f5;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .party-title-detail {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a2a3a;
+            margin: 0;
+        }
+
+        .candidatos-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .candidato-senador {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 18px;
+            background: #f9fafb;
+            border-radius: 60px;
+            transition: all 0.2s;
+            border: 1px solid #e9ecef;
+        }
+
+        .candidato-senador:hover {
+            background: #f1f5f9;
+            transform: translateX(5px);
+        }
+
+        .candidato-numero {
+            font-weight: 800;
+            font-size: 18px;
+            color: #c10e16;
+            width: 40px;
+            text-align: center;
+        }
+
+        .candidato-img-mini {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 8px;
+            background-color: #1e4668;
+        }
+
+        .candidato-nombre-completo {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e2f3e;
+            flex: 1;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 768px) {
+            .party-card { width: 220px; padding: 18px 10px; }
+            .party-name { font-size: 14px; }
+            .party-img { width: 60px; height: 60px; }
+            .party-title-detail { font-size: 20px; }
+            .party-img-detail { width: 60px; height: 60px; }
+            .candidato-senador { padding: 8px 12px; }
+            .candidato-nombre-completo { font-size: 12px; }
+            .candidato-img-mini { width: 36px; height: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="container">
+        <nav class="menu">
+            <a href="tabla.html">Inicio</a>
+            <a href="senadoresnacionales.html">Senadores</a>
+            <a href="diputadosregionalesnacionales.html">Diputados</a>
+            <a href="parlamentoandino.html">Parlamento Andino</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div id="lista-partidos">
+        <div class="title">ELECCIONES GENERALES 2026</div>
+        <div class="subtitle">CANDIDATOS AL SENADO</div>
+        
+        <div class="parties-grid">
+            <!-- PARTIDOS COMPLETOS (TODOS LOS QUE APARECEN EN LA LISTA) -->
+            <div class="party-card" onclick="mostrarSenadores('FUERZA POPULAR', 'fuerzapopular.jpg')">
+                <img class="party-img" src="partidos/fuerzapopular.jpg" alt="FP" onerror="this.src='https://placehold.co/80x80?text=FP'">
+                <div class="party-name">FUERZA POPULAR</div>
+                <div class="candidate-count">14 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('ALIANZA PARA EL PROGRESO', 'AlianzaparaelProgreso.jpg')">
+                <img class="party-img" src="partidos/AlianzaparaelProgreso.jpg" alt="APP" onerror="this.src='https://placehold.co/80x80?text=APP'">
+                <div class="party-name">ALIANZA PARA EL PROGRESO</div>
+                <div class="candidate-count">14 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('AVANZA PAÍS', 'avanzapais.jpg')">
+                <img class="party-img" src="partidos/avanzapais.jpg" alt="AVANZA" onerror="this.src='https://placehold.co/80x80?text=AP'">
+                <div class="party-name">AVANZA PAÍS</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('FE EN EL PERÚ', 'feenelperu.jpg')">
+                <img class="party-img" src="partidos/feenelperu.jpg" alt="FE" onerror="this.src='https://placehold.co/80x80?text=FE'">
+                <div class="party-name">FE EN EL PERÚ</div>
+                <div class="candidate-count">13 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('PARTIDO PAÍS PARA TODOS', 'paisparatodos.jpg')">
+                <img class="party-img" src="partidos/paisparatodos.jpg" alt="PPT" onerror="this.src='https://placehold.co/80x80?text=PPT'">
+                <div class="party-name">PARTIDO PAÍS PARA TODOS</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('SOMOS PERÚ', 'Somos_Perú.jpg')">
+                <img class="party-img" src="partidos/Somos_Perú.jpg" alt="SP" onerror="this.src='https://placehold.co/80x80?text=SP'">
+                <div class="party-name">SOMOS PERÚ</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('PARTIDO DEL BUEN GOBIERNO', 'buengobierno.jpg')">
+                <img class="party-img" src="partidos/buengobierno.jpg" alt="PBG" onerror="this.src='https://placehold.co/80x80?text=PBG'">
+                <div class="party-name">PARTIDO DEL BUEN GOBIERNO</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('JUNTOS POR EL PERÚ', 'juntos_por_el_Peru.jpg')">
+                <img class="party-img" src="partidos/juntos_por_el_Peru.jpg" alt="JPP" onerror="this.src='https://placehold.co/80x80?text=JPP'">
+                <div class="party-name">JUNTOS POR EL PERÚ</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('PERÚ LIBRE', 'perulibre.jpg')">
+                <img class="party-img" src="partidos/perulibre.jpg" alt="PL" onerror="this.src='https://placehold.co/80x80?text=PL'">
+                <div class="party-name">PERÚ LIBRE</div>
+                <div class="candidate-count">14 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('RENOVACIÓN POPULAR', 'renovaciónpopular.jpg')">
+                <img class="party-img" src="partidos/renovaciónpopular.jpg" alt="RP" onerror="this.src='https://placehold.co/80x80?text=RP'">
+                <div class="party-name">RENOVACIÓN POPULAR</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('PODEMOS PERÚ', 'podemosperu.jpg')">
+                <img class="party-img" src="partidos/podemosperu.jpg" alt="PP" onerror="this.src='https://placehold.co/80x80?text=PP'">
+                <div class="party-name">PODEMOS PERÚ</div>
+                <div class="candidate-count">14 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('PARTIDO CÍVICO OBRAS', 'Partido_Civico_OBRAS.jpg')">
+                <img class="party-img" src="partidos/Partido_Civico_OBRAS.jpg" alt="OBRAS" onerror="this.src='https://placehold.co/80x80?text=OBRAS'">
+                <div class="party-name">PARTIDO CÍVICO OBRAS</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('PARTIDO DEMÓCRATA VERDE', 'partidoverde.jpg')">
+                <img class="party-img" src="partidos/partidoverde.jpg" alt="VERDE" onerror="this.src='https://placehold.co/80x80?text=VERDE'">
+                <div class="party-name">PARTIDO DEMÓCRATA VERDE</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('COOPERACIÓN POPULAR', 'Logo_Cooperacion_Popular_Peru.jpg')">
+                <img class="party-img" src="partidos/Logo_Cooperacion_Popular_Peru.jpg" alt="CP" onerror="this.src='https://placehold.co/80x80?text=CP'">
+                <div class="party-name">COOPERACIÓN POPULAR</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('INTEGRIDAD DEMOCRÁTICA', 'Integridad_democratica.jpg')">
+                <img class="party-img" src="partidos/Integridad_democratica.jpg" alt="ID" onerror="this.src='https://placehold.co/80x80?text=ID'">
+                <div class="party-name">INTEGRIDAD DEMOCRÁTICA</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('FRENTE DE LA ESPERANZA', 'frente.jpg')">
+                <img class="party-img" src="partidos/frente.jpg" alt="FE" onerror="this.src='https://placehold.co/80x80?text=FE'">
+                <div class="party-name">FRENTE DE LA ESPERANZA</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('AHORA NACION', 'ahoranacion.jpg')">
+                <img class="party-img" src="partidos/ahoranacion.jpg" alt="AN" onerror="this.src='https://placehold.co/80x80?text=AN'">
+                <div class="party-name">AHORA NACION</div>
+                <div class="candidate-count">15 candidatos</div>
+            </div>
+            <div class="party-card" onclick="mostrarSenadores('SÍ CREO', 'sicreo.jpg')">
+                <img class="party-img" src="partidos/sicreo.jpg" alt="SC" onerror="this.src='https://placehold.co/80x80?text=SC'">
+                <div class="party-name">SÍ CREO</div>
+                <div class="candidate-count">14 candidatos</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detalle-senadores" style="display:none;">
+        <button class="volver-btn" onclick="volverLista()">← VOLVER A PARTIDOS</button>
+        <div id="contenido-senadores"></div>
+    </div>
+</div>
+
+<script>
+    // BASE DE DATOS DE SENADORES POR PARTIDO (TODOS LOS PARTIDOS ACTUALIZADOS)
+    const senadoresPorPartido = {
+        "FUERZA POPULAR": ["MIGUEL ANGEL TORRES MORALES","MARTHA GLADYS CHAVEZ COSSIO","FERNANDO MIGUEL ROSPIGLIOSI CAPURRO","CARMEN PATRICIA JUAREZ GALLEGOS","CESAR AUGUSTO ASTUDILLO SALCEDO","MARTHA LUPE MOYANO DELGADO","CARLOS MARIO DEL CARMEN TUBINO ARIAS SCHREIBER","CECILIA ANTONIETA CASTRO TORRES","CARLOS FERNANDO MESIA RAMIREZ","SITZA LITA ROMERO PERALTA","SANDRO ESPOSITO SHAPIAMA","RITA ELENA AYASTA DE DIAZ","RICARDO RIVERA ROMERO","LILIANA ANGELICA PINEDO ACHACA"],
+        "ALIANZA PARA EL PROGRESO": ["CESAR ACUÑA PERALTA","MARISOL ESPINOZA CRUZ","CESAR HENRY VASQUEZ SANCHEZ","LADY MERCEDES CAMONES SORIANO","JUAN JOSE SANTIVAÑEZ ANTUNEZ","TANIA ROSALIA RODAS MALCA","ROBERTO GAMANIEL VIEIRA PORTUGAL","MAGALY ROSMERY RUIZ RODRIGUEZ","MARTIN FELIPE SALAS ZEGARRA","CINDY ARLETTE CONTRERAS BAUTISTA","LUIS ROBERTO KAMICHE MORANTE","LUZ REBECA CRUZ TEVEZ","JORGE ALFONSO MARTICORENA MENDOZA","JOSE ANTONIO PALACIOS OBREGON"],
+        "AVANZA PAÍS": ["JOSE DANIEL WILLIAMS ZAPATA","MARIA DEL CARMEN OCHOA MONTES","ALDO LENIN MARTINEZ ZAPATA","GLADYS LILIANA CANALES CAYLLAHUA","PEDRO ANGEL OLIVARES TOLEDO","ROSA ELVIRA VASQUEZ CUBA","JOSE LUIS COAQUIRA CONDORI","KATHERINE MILAGROS CASTRO VASQUEZ","WALTER ROGERS ZAVALA ORIHUELA","MARIA CECILIA CHACON ALFARO","JORGE LUIS ARENAS ALVA","LILIANA ROSA MANRIQUE BARRETO","PABLO JOSE MORALES ALFARO","ROXANA ELIZABETH FLORES BARDALES","LUIS ALBERTO ALVAREZ SALAZAR"],
+        "FE EN EL PERÚ": ["BORIS MICHEEL PAZ DE LA BARRA","JESUS FANNY FREIGEIRO MORAN","JULIO CHUNG DAVILA","EVANGELINA HUAMANI LLAMAS","CARLOS HUMBERTO GUZMAN RODRIGUEZ","CELIA BEATRIZ MEJIA MORI","JOSE LUIS HUIRSE ZELARAYAN","SABINA CARMEN ROSA SOTO HERRERA","ALVARO GONZALO PAZ DE LA BARRA FREIGEIRO","SELENE MARBEL ROJAS QUIÑONES","FAUSTO JUAN FLORES FLORES","GABY GIOVANNA JAUREGUI GRADOS","YONER ALEXANDER VARAS LLATAS"],
+        "PARTIDO PAÍS PARA TODOS": ["AMELIA JULIA PRINCIPE TRUJILLO","VLADIMIR ANTONIO MEZA VILLARREAL","SUSANA YNES CASTAÑEDA OTSU","JUAN MANUEL KOSME SHEPUT MOORE","ELENA ELIZABETH LON KAN PRADO","MARCO TULIO FALCONI PICARDO","RUTH PERPETUA VALENCIA MEZA","JAVIER ANTONIO BOBADILLA LEIVA","JUANA ALEXANDRA CHIPANA MORAZZANI","GEORGE EDWARD MALAGA TRILLO","TERESA EGLE MOGROVEJO VALERA","HERMES RAMON VELASQUEZ CHAMOCHUMBI","YESSICA SUSANA MERE RAMIREZ","MARIO ENRICO CAROZZI FERNANDEZ MALDONADO","MARIA ELENA CHUMPITAZI HERNANDEZ"],
+        "SOMOS PERÚ": ["GUILLERMO ALEJANDRO ANTONIO ALIAGA PAJARES","MATILDE FERNANDEZ FLOREZ","DANIEL ENRIQUE SALAVERRY VILLA","MARIA DEL ROCIO PORRAS MARTEL","ELMER ALFONSO DUEÑAS ESPIRITU","ELIZABETH SARA MEDINA HERMOSILLA","HECTOR VALER PINTO","DORA YANE MILLONES CARO DE WU","ALEX ANTONIO PAREDES GONZALES","ZONIA MARIBEL LEON MUGUERZA","DANIEL ASUNCION PRINCIPE COLLAZOS","GIOVANNA BERENICE CASTAGNINO PASTOR","CESAR PANIAGUA CHACON","YASMINA JAQUELIN LOYOLA SOPLIN","JULIO APAZA ORTIZ"],
+        "PARTIDO DEL BUEN GOBIERNO": ["FLAVIO FELIPE FIGALLO RIVADENEYRA","PATRICIA MILAGROS ITURREGUI BYRNE","CARLOS DAVID CABALLERO LEON","LUZ ELENA FORONDA MERINO","JUAN FRANCISCO ROJAS LEO","SUSANA FLOR DE MARIA MATUTE CHARUN","ABRAHAM SANTIAGO SILES VALLEJOS","LUISA IGNACIA SANTUR ALBERCA","JORGE OCTAVIO GAVIDIA RODRIGUEZ","MARIA DEL PILAR AYQUIPA GUZMAN","JOSE GUILLERMO NUGENT HERRERA","SABINA GLORIA NUÑEZ ALTAMIRANO","ABEL MAXIMO SALAZAR CHINCHILLA","BEATRIZ CAROLINA ZAVALA LOAYZA","JUAN CARLOS GUERRERO BRAVO"],
+        "JUNTOS POR EL PERÚ": ["JOSE MERCEDES CASTILLO TERRONES","SILVANA EMPERATRIZ ROBLES ARAUJO","SAUL ANDRES ARMACANQUI MORALES","ANAHI DURAND GUEVARA","JOSE CARLOS ABARCA CALLO","JANET PATRICIA MARIN RIVERA","BERNARDO JAIME QUITO SARMIENTO","MARGOT PALACIOS HUAMAN","ISAAC HUMALA NUÑEZ","PAULA HONORIA O'HIGGINS LUYO","HERNANDO ISMAEL CEVALLOS FLORES","EDELMIRA CRISTINA ROCILLO TELLO","IBER ANTENOR MARAVI OLARTE","LUZ MARINA RODRIGUEZ CHAVEZ","PASION NEOMIAS DAVILA ATANACIO"],
+        "PERÚ LIBRE": ["VLADIMIR ROY CERRON ROJAS","JESSICA DEL PILAR BAÑOS RIVAS","GUIDO ERNESTO BELLIDO UGAZ","BELINDA GEORGINA PEREZ VASQUEZ","JORGE ANTONIO SUAREZ GUERRA","MERY LUZ VASQUEZ RIVERA","JULIO JOSE SANCHEZ RASGADO","DORIS BEATRIZ ROJAS COCA","JOSE ARTURO AQUINO MOGROVEJO","MARLENE AMPARO VILLAVICENCIO TINEO","RONALD ALEXIS PAUCAR HUAMAN","JENNY MERCEDES NAVARRO TRUJILLO","FRANKLIN EDGAR TAPIA CHAMBA","SANDRA JULIA SEPULVEDA SALAS"],
+        "RENOVACIÓN POPULAR": ["RAFAEL BERNARDO LOPEZ ALIAGA CAZORLA","FIORELLA ROSMERY MOLINELLI ARISTONDO","JORGE LUIS NUÑEZ SALAS","MARIA CRISTINA JURADO HIDALGO","JOSE ALEJANDRO ORTEGA ORTEGA","LUCIA MERCEDES BARRIONUEVO ZEVALLOS","RICARDO JAVIER PINZON ROBLES","ROXANA MARIBEL DIAZ LAURA","JORGE ALBERTO PAUCARMAYTA","MARIA ISABEL CORTEZ ESPINO","MANUEL DAVID PIEDRA MARTINEZ","SANDRA ELENA CHAVEZ FARRO","PEDRO ALEJANDRO JIMENEZ VILLANUEVA","CARMEN ROSA BAUTISTA MATUTE","JOSE ANTONIO MAURICIO VASQUEZ"],
+        "PODEMOS PERÚ": ["JOSE LEON LUNA GALVEZ","KARINA JULISSA BETETA RUBIO","EDGARD RICHARD CORNEJO RAMIREZ","ANGELICA MARIA ALARCON HERRERA","JOSE ANDRES REYMUNDO MERCADO","ANA MARIA ARROYO BERROCAL","JUANA CELIA DURAN BAZAN","LUIS ALBERTO VILLEGAS GAMARRA","JESUS JAVIER ARAUJO HUAMAN","MARTHA ROSA AURIS AMES","WALTER LUIS SALAZAR SANCHEZ","MARIA GRIZELDA MONTES RIVERA","PABLO AUGUSTO ARIAS VALENCIA","SELENE YANET RIVERA ZAMBRANO"],
+        "PARTIDO CÍVICO OBRAS": ["RICARDO PABLO BELMONT CASSINELLI","ROSA MARIA BARTRA BARRIGA","ALDO EMILIO RENGIFO RENGIFO","PATRICIA CARMEN ALVAREZ GARCIA","JUAN BAUTISTA TAPIA REATEGUI","MARIA ELENA ALVARADO AREVALO","CARLOS ALBERTO CARMONA SIFUENTES","MARIA ROSA PAREDES ZAPATA","ROBERTO MANUEL ORDOÑEZ ZELADA","KARINA EDITH DELGADO TRUJILLO","JOSE CARLOS RUBIO HERNANDEZ","VICTORIA ESPERANZA ABANTO SULLCA","JOEL CHRISTOPHER HUAMAN ALATA","EMMA LILIANA RIOS TRUJILLO","JORGE LUIS SALAZAR VILLARREAL"],
+        "PARTIDO DEMÓCRATA VERDE": ["ALEX GONZALES CASTILLO","MARIA TERESA BUSTAMANTE QUISPE","JORGE MIGUEL ALVAREZ VALLE","ROSA ANGELICA SUAREZ VARELA","JAVIER ARTURO CHIRINOS SANTOS","LILIANA ROSA YUPANQUI","CARLOS ENRIQUE SILVA TAFUR","ROXANA ELIZABETH GONZALES","OSCAR RAUL ALFARO BONIFACIO","MIRIAM ROSA MONTALVO GARCIA","LUIS ENRIQUE SALAZAR PACHECO","PAULINA VICTORIA AGUILAR QUISPE","JUAN CARLOS TORRES RAMOS","NANCY LILIANA REYNA AGUIRRE","JOSE ALBERTO RAMIREZ FLORES"],
+        "COOPERACIÓN POPULAR": ["YONHY LESCANO ANCIETA","JENNY ELIZABETH VILCA MAMANI","RONALD RUTTI CALLATA","LEONOR TAMAR CHAVEZ ORIHUELA","JUAN CARLOS GARCIA ROMERO","MARIA DEL PILAR EMILIA RAVINES AYALA","LUIS ARMANDO CHAVEZ BORDA","ANA LUCIA ROMERO ALFARO","SANTIAGO CRISTOBAL SANTOS PANEZ","ROSAURA ELVIRA MENDOZA ROJAS","ERWIN ALBERTO RAMOS RODRIGUEZ","MARTHA ROSA LORENZO FUENTES","ALBERTO CESAR QUISPE HILARIO","SUSANA ROSARIO QUISPE CORNEJO","NESTOR ADOLFO SAAVEDRA GOMEZ"],
+        "INTEGRIDAD DEMOCRÁTICA": ["WOLFGANG MARIO GROZO COSTA","FERNANDO OSCAR CARDENAS SANCHEZ","CAROLINA ESTHER VELASQUEZ CALDERON","JORGE WASHINGTON VIVANCO MAMANI","JENNY CAROLINA MONZON CHAMBI","ROBERTO CARLOS MEJIA NAVARRETE","GLORIA ELENA TORRES OLIVAS","JOSE ALFONSO CHECYA CHIPA","KARLA VANESSA MAMANI GARCIA","JESUS ALBERTO FERNANDEZ CALDERON","LAURA ISABEL GARCIA MELGAR","JAVIER ALONSO SALAZAR DELGADO","PAULINO HUAYNALAYA ROMAN","MARISOL MARIBEL SANTOS AREVALO","RAUL VICENTE ALLAUCA BARRIOS"],
+        "FRENTE DE LA ESPERANZA": ["LUIS FERNANDO OLIVERA VEGA","MAGALY LIZETH GRANADOS VASQUEZ","JULIO ARMANDO BANCES SALAZAR","MARTHA SOFIA RENTERIA JARA","JUAN BAUTISTA ZEGARRA CALERO","CARMEN JULIA PAREDES MIÑANO","IVAN WILFREDO CERVANTES HILARES","ROSA MARIA CABREJOS VILLAVERDE","JOSE ARTEMIO OYOLA RAMIREZ","ANA CECILIA MUÑOZ SANCHEZ","JULIO FLORENTINO PRIETO CORNEJO","SALVADOR CARLOS FLORES FERNANDEZ","KARINA ALEJANDRA PACHAS HUAPAYA","MELANIA LEONOR INFANTES CHANTA","CARLOS ALBERTO VARGAS MEZA"],
+        "AHORA NACION": ["PABLO ALFONSO LOPEZ CHAU NAVA","LUCIA MARIA GALLARDO PACHECO","JOSE ALONSO RODRIGUEZ VEGA","FIORELLA GEORGINA INFANTAS PEREZ","ARMANDO CORNELIO MORA TORRES","ELIZABETH KATHERIN AGUILAR DEXTRE","JULIO FERNANDO GUERRA MONTEZA","MARIA STEFANY ARCE PANTOJA","WILFREDO VALERIO ARONE RAMIREZ","KATHERINE GIULIANA ESCOBAR URRELO","EDWARD ENRIQUE VALENZUELA SUAREZ","CINTHIA CAROLINA ALCANTARA ALFARO","JESUS ALBERTO NAVARRO QUISPE","ROXY CAROLINE REYES BARRIOS","JORGE ENRIQUE SOTO SARAVIA"],
+        "SÍ CREO": ["ALFONSO CARLOS ESPA Y GARCES-ALVEAR","MARIA ALEJANDRA REYES CARRILLO","JAVIER ALFREDO NORIEGA GARCIA","MILAGROS PILAR GUEVARA CABRERA","FRANCISCO JAVIER BASURCO COCA","NANCY CELESTE HUAMANI VILCA","GUILLERMO ENRIQUE GANOZA ARENAS","MILAGRITOS MARIA ESPINOZA ESPINOZA","JOSE MIGUEL MONTOYA RIVERA","JANET LILIANA VASQUEZ MORENO","RICARDO MARTIN BRICEÑO VILLEGAS","ELIANA ROCIO TORRES RODRIGUEZ","LUIS ALBERTO GAMARRA GUTIERREZ","KATHERINE ELIZABETH SAAVEDRA MONTES"]
+    };
+
+    function mostrarSenadores(nombrePartido, imgSrc) {
+        document.getElementById('lista-partidos').style.display = 'none';
+        document.getElementById('detalle-senadores').style.display = 'block';
+        
+        const candidatos = senadoresPorPartido[nombrePartido];
+        const imagenCompleta = `partidos/${imgSrc}`;
+        
+        let html = `
+            <div class="senadores-container">
+                <div class="party-header-detail">
+                    <img class="party-img-detail" src="${imagenCompleta}" alt="${nombrePartido}" onerror="this.src='https://placehold.co/80x80?text=${nombrePartido.substring(0,3)}'">
+                    <h2 class="party-title-detail">${nombrePartido}</h2>
+                </div>
+                <div class="candidatos-lista">
+        `;
+        
+        candidatos.forEach((candidato, index) => {
+            html += `
+                <div class="candidato-senador">
+                    <div class="candidato-numero">${index + 1}</div>
+                    <img class="candidato-img-mini" src="${imagenCompleta}" alt="logo" onerror="this.src='https://placehold.co/42x42?text=Logo'">
+                    <div class="candidato-nombre-completo">${candidato}</div>
+                </div>
+            `;
+        });
+        
+        html += `</div></div>`;
+        document.getElementById('contenido-senadores').innerHTML = html;
+    }
+    
+    function volverLista() {
+        document.getElementById('detalle-senadores').style.display = 'none';
+        document.getElementById('lista-partidos').style.display = 'block';
+        document.getElementById('contenido-senadores').innerHTML = '';
+    }
+</script>
+</body>
+</html>
